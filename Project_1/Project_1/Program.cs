@@ -8,35 +8,62 @@ using System.Threading.Tasks;
 namespace Project_1
 {
  
+    public struct TCPConfig
+    {
+        public string dns;
+        public string ip;
+        public int port;
+        public TCPConfig(string DNS, string IP, int P)
+        {
+            dns = DNS;
+            ip = IP;
+            port = P;
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Node P = new Node()
+            int N = Convert.ToInt32(args[1]);
+            Dictionary<int, TCPConfig> tcpConfig = new Dictionary<int, TCPConfig>();
+            using (StreamReader dnsReader = new StreamReader("tcp_config.txt"))
+            {
+
+                string line;
+                char[] comma = { ',' };
+                while ((line = dnsReader.ReadLine()) != null)
+                {
+                    string[] words = line.Split(comma);
+                    tcpConfig.Add(Convert.ToInt32(words[0]), new TCPConfig(words[1], words[2], Convert.ToInt32(words[3])));
+                }
+            }
+            using (StreamReader treeReader = new StreamReader("tree.txt"))
+            {
+                string line;
+                char[] parens = { '(', ')' };
+                char[] comma = { ',' };
+                while ((line = treeReader.ReadLine()) != null)
+                {
+                    line = line.Trim(parens);
+                    string[] pair = line.Split(comma);
+                    int parent = Convert.ToInt32(pair[0]);
+                    int child = Convert.ToInt32(pair[1]);
+                    if (parent == N)
+                    {
+
+                    }
+                }
+            }
             while (true)
             {
                 string line = Console.ReadLine();
                 char[] space = { ' ' };
                 string[] words = line.Split(space);
                 string command = words[0];
-                if (command == "create")
+              //  if (command == "create")
 
 
             }
-           
-            /*
-            Tree tree = new Tree(new List<string>());
-            tree.printTree();
-            tree.Nodes[1].Create("test.txt");
-            tree.printNodes();
-            tree.Nodes[5].Append("test.txt", "test line");
-            tree.printNodes();
-            tree.Nodes[6].Read("test.txt");
-            tree.printNodes();
-            tree.Nodes[3].Delete("test.txt");
-            tree.printNodes();
-            System.Console.Read();
-            */
         }
 
     }

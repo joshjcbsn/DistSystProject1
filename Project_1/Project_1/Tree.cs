@@ -26,14 +26,14 @@ namespace Project_1
                     if (Nodes.ContainsKey(parent))
                     {
                         Node childNode = new Node(child, Nodes[parent], filenames);
-                        Nodes[parent].addChild(childNode);
+                        Nodes[parent].addNeighbor(childNode);
                         Nodes[child] = childNode;
                     }
                     else
                     {
                         Node parentNode = new Node(parent, null, filenames);
                         Node childNode = new Node(child, parentNode, filenames);
-                        parentNode.addChild(childNode);
+                        parentNode.addNeighbor(childNode);
                         Nodes[parent] = parentNode;
                         Nodes[child] = childNode;
                     }
