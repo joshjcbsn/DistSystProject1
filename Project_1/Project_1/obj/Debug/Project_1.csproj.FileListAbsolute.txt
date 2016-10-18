@@ -1,0 +1,8 @@
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\bin\Debug\Project_1.exe.config
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\bin\Debug\Project_1.exe
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\bin\Debug\Project_1.pdb
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\obj\Debug\Project_1.csprojResolveAssemblyReference.cache
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\obj\Debug\Project_1.exe
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\obj\Debug\Project_1.pdb
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\obj\Debug\Project_1.UI.resources
+C:\Users\jacobj6\Dropbox\Project_1\Project_1\obj\Debug\Project_1.csproj.GenerateResource.Cache
