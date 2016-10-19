@@ -24,7 +24,8 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
-            int N = Convert.ToInt32(args[1]);
+            Console.WriteLine("Enter Process #");
+            int N = Convert.ToInt32(Console.ReadLine());
             Dictionary<int, TCPConfig> tcpConfig = new Dictionary<int, TCPConfig>();
             using (StreamReader dnsReader = new StreamReader("tcp_config.txt"))
             {
