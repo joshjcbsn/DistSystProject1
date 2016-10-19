@@ -1,6 +1,6 @@
-﻿1,ec2-54-191-50-63.us-west-2.compute.amazonaws.com,4
-2,ec2-54-191-50-63.us-west-2.compute.amazonaws.com,6
+﻿1,ec2-54-191-50-63.us-west-2.compute.amazonaws.com,54.191.50.63,4
+2,ec2-54-191-50-63.us-west-2.compute.amazonaws.com,54.191.50.63,6
 3,ec2-52-15-82-96.us-east-2.compute.amazonaws.com,52.15.82.96,8
 4,ec2-52-15-82-96.us-east-2.compute.amazonaws.com,52.15.82.96,10
-5,ec2-52-91-107-58.compute-1.amazonaws.com,52.15.82.96,12
-6,ec2-52-91-107-58.compute-1.amazonaws.com,52.15.82.96,14
+5,ec2-52-91-107-58.compute-1.amazonaws.com,52.91.107.58,12
+6,ec2-52-91-107-58.compute-1.amazonaws.com,52.91.107.58,14

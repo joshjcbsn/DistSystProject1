@@ -35,10 +35,15 @@ namespace Project_1
             //set process number
             n = N;
             tcp = TCP;
-            IPAddress ipAddress = IPAddress.Parse(tcp.ip);
-            listener = new TcpListener(ipAddress, tcp.port);
-            listener.Start();
-         
+            
+            try
+            {
+                IPAddress ipAddress = IPAddress.Parse(tcp.ip);
+                listener = new TcpListener(ipAddress, tcp.port);
+                listener.Start();
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
         }
 
         public void getConnections()
