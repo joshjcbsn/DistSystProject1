@@ -111,6 +111,7 @@ namespace Project_1
 
         public void sendMsg(int P, string msg)
         {
+            Console.WriteLine("Sending '{0}' to P{1}", msg, P);
             try
             {
                 string host = neighbors[P].dns;
