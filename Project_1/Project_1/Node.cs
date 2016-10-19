@@ -111,11 +111,12 @@ namespace Project_1
 
         public void sendMsg(int P, string msg)
         {
-            Console.WriteLine("Sending '{0}' to P{1}", msg, P);
+            
             try
             {
                 string host = neighbors[P].dns;
                 int portNum = neighbors[P].port;
+                Console.WriteLine("Sending '{0}' to {1} on port {2}", msg, host, portNum);
                 using (TcpClient client = new TcpClient(host, portNum))
                 {
                     try
