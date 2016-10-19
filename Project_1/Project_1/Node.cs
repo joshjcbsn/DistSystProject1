@@ -246,7 +246,11 @@ namespace Project_1
                 files.Add(filename, file);
                 foreach (int P in neighbors.Keys)
                 {
-                    sendMsg(P, String.Format("CREATE {0} {1}", filename, n));
+                    if (P != h)
+                    {
+                        sendMsg(P, String.Format("CREATE {0} {1}", filename, n));
+                    }
+                   
                 }
             }
         }
