@@ -128,10 +128,6 @@ namespace Project_1
             catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
-        public int getN()
-        {
-            return n;
-        }
 
         /// <summary>
         /// Adds the child.
@@ -229,17 +225,15 @@ namespace Project_1
         /// <param name="filename">File name.</param>
         public void Create(string filename)
         {
-            FileStream fs = File.Create(filename);
             FileToken file = new FileToken(filename, n);
             files.Add(filename, file);
-            fs.Close();
             foreach (int P in neighbors.Keys)
             {
                 sendMsg(P, String.Format("CREATE {0} {1}", filename, n));
 
             }
         }
-        public void Create(string filename, int h)
+        private void Create(string filename, int h)
         {
             if (!(files.ContainsKey(filename)))
             {
@@ -266,12 +260,11 @@ namespace Project_1
                 SpinWait.SpinUntil(hasToken);
             }
 
-            File.Delete(filename);
             files.Remove(filename);
             foreach (int P in neighbors.Keys)
                 sendMsg(P, String.Format("DELETE {0}", filename));
         }
-        public void Deleted(string filename)
+        private void Deleted(string filename)
         {
             if (files.Remove(filename))
                 foreach (int P in neighbors.Keys)
@@ -291,14 +284,7 @@ namespace Project_1
                 this.Req(filename);
                 SpinWait.SpinUntil(hasToken);
             }
-            using (StreamReader fReader = new StreamReader(filename))
-            {
-                string line;
-                while ((line = fReader.ReadLine()) != null)
-                {
-                    Console.WriteLine(line);
-                }
-            }
+            Console.Write(files[filename].text);
             this.Release(filename);
         }
         /// <summary>
@@ -315,10 +301,7 @@ namespace Project_1
                 this.Req(filename);
                 SpinWait.SpinUntil(hasToken);
             }
-            using (StreamWriter fWriter = new StreamWriter(filename))
-            {
-                fWriter.WriteLine(line);
-            }
+            files[filename].text += line;
             this.Release(filename);
         }
 
