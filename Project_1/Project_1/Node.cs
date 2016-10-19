@@ -53,7 +53,7 @@ namespace Project_1
                 try
                 {
                     Console.WriteLine("Waiting for connection");
-             
+
                     using (TcpClient client = listener.AcceptTcpClient())
                     {
                         byte[] bytes = new byte[1024];
@@ -75,10 +75,9 @@ namespace Project_1
                         }
                         this.msgHandler(data);
                         // Shutdown and end connection
-                        client.Close();
                     }
                 }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
+                catch (Exception ex) { }//Console.WriteLine(ex.Message); }
                 
             }
            
