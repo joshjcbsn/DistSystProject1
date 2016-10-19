@@ -38,8 +38,8 @@ namespace Project_1
             
             try
             {
-                IPAddress ipAddress = IPAddress.Parse(tcp.ip);
-                listener = new TcpListener(ipAddress, tcp.port);
+                
+                listener = new TcpListener(IPAddress.Any, tcp.port);
                 listener.Start();
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
