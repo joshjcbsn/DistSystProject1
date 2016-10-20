@@ -38,9 +38,10 @@ namespace Project_1
             
             try
             {
-                Console.WriteLine("started listener");
                 listener = new TcpListener(IPAddress.Any, tcp.port);
                 listener.Start();
+                Console.WriteLine("started listener");
+
             }
             catch (Exception ex) { Console.WriteLine(String.Format("error: {0}", ex.Message)); }
 
