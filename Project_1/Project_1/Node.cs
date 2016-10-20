@@ -39,7 +39,7 @@ namespace Project_1
         }
 
         /// <summary>
-        /// Prints neighbors, then begins listening for connections
+        /// Listens for tcp connections, using a recursive method of accepting connections
         /// </summary>
         public void getConnections()
         {
@@ -50,7 +50,8 @@ namespace Project_1
                 Console.WriteLine("Waiting for connection");
                 using (TcpClient client = listener.AcceptTcpClient())
                 {
-                    Task newListener = Task.Factory.StartNew(() => getConnections());
+                    //start new instance to accept next connection
+                    Task newConnection = Task.Factory.StartNew(() => getConnections());
                     byte[] bytes = new byte[1024];
                     string data = null;
                     Console.WriteLine("Connected");
@@ -113,10 +114,9 @@ namespace Project_1
                 IPAddress ip = IPAddress.Parse(neighbors[P].ip);
                 int portNum = neighbors[P].port;
 
-                Console.WriteLine("Sending '{0}' to {1} on port {2}", msg, host, portNum);
+                Console.WriteLine("Sending to {0}: {1}", P, msg);
                 using (TcpClient client = new TcpClient(host, portNum))
                 {
-                   // client.Connect(ip, portNum);
                     try
                     {
                         using (NetworkStream stream = client.GetStream())
@@ -126,7 +126,6 @@ namespace Project_1
                         }
                     }
                     catch (Exception ex) { Console.WriteLine(ex.Message); }
-
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
@@ -158,6 +157,7 @@ namespace Project_1
                     sendMsg(files[filename].holder, String.Format("REQ {0} {1}", filename, n));
                     files[filename].asked = true;
                 }
+                files[filename].printInfo();
             }
         }
 
@@ -185,6 +185,7 @@ namespace Project_1
                     }
 
                 }
+                files[filename].printInfo();
             }
 
         }
@@ -204,6 +205,7 @@ namespace Project_1
                 files[filename].setUsing(true);
             else
                 sendMsg(files[filename].holder, String.Format("PRIVILEGE {0} {1}", filename, text));
+            files[filename].printInfo();
         }
 
         /// <summary>
@@ -217,6 +219,7 @@ namespace Project_1
             files[filename].setAsked(false);
             if ((files[filename].queue.Count) > 0)
                 sendMsg(files[filename].queue[0], String.Format("PRIVILEGE {0} {1}", filename, files[filename].text));
+            files[filename].printInfo();
         }
 
         /// <summary>
@@ -229,6 +232,7 @@ namespace Project_1
             files.Add(filename, file);
             foreach (int P in neighbors.Keys)
                 sendMsg(P, String.Format("CREATE {0} {1}", filename, n));
+            printFiles();
         }
 
         /// <summary>
@@ -250,6 +254,7 @@ namespace Project_1
                     }
                    
                 }
+                printFiles();
             }
         }
 
@@ -270,6 +275,7 @@ namespace Project_1
             files.Remove(filename);
             foreach (int P in neighbors.Keys)
                 sendMsg(P, String.Format("DELETED {0}", filename));
+            printFiles();
         }
         /// <summary>
         /// Removes filetoken for filename from dictionary
@@ -278,8 +284,11 @@ namespace Project_1
         private void Deleted(string filename)
         {
             if (files.Remove(filename))
+            {
                 foreach (int P in neighbors.Keys)
                     sendMsg(P, String.Format("DELETED {0}", filename));
+                printFiles();
+            }             
         }
 
         /// <summary>
@@ -322,7 +331,7 @@ namespace Project_1
         /// </summary>
         public void printFiles()
         {
-            Console.WriteLine("Process {0}", n);
+            Console.WriteLine("Files:");
             foreach (FileToken file in files.Values)
             {
                 file.printInfo();
