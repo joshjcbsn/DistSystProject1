@@ -50,7 +50,7 @@ namespace Project_1
                 Console.WriteLine("Waiting for connection");
                 using (TcpClient client = listener.AcceptTcpClient())
                 {
-                    getConnections();
+                    Task newListener = Task.Factory.StartNew(() => getConnections());
                     byte[] bytes = new byte[1024];
                     string data = null;
                     Console.WriteLine("Connected");
