@@ -79,7 +79,7 @@ namespace Project_1
                         // Shutdown and end connection
                     }
                 }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
+                catch (Exception ex) { }// Console.WriteLine(ex.Message); }
                 
             }
            
