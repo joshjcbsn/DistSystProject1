@@ -24,15 +24,17 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
+            //Get process number
             Console.WriteLine("Enter Process #");
             int N = Convert.ToInt32(Console.ReadLine());
+            //Read info from tcp_config.txt
             Dictionary<int, TCPConfig> tcpConfig = new Dictionary<int, TCPConfig>();
-            using (StreamReader dnsReader = new StreamReader("tcp_config.txt"))
+            using (StreamReader tcpReader = new StreamReader("tcp_config.txt"))
             {
 
                 string line;
                 char[] comma = { ',' };
-                while ((line = dnsReader.ReadLine()) != null)
+                while ((line = tcpReader.ReadLine()) != null)
                 {
                     string[] words = line.Split(comma);
                     tcpConfig.Add(Convert.ToInt32(words[0]), new TCPConfig(words[1], words[2], Convert.ToInt32(words[3])));

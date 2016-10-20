@@ -297,17 +297,21 @@ namespace Project_1
         /// <param name="fileName">File name.</param>
         public void Read(string filename)
         {
-            if ((files[filename].holder != n) ||
-               (files[filename].utilizing))
+            if (files.ContainsKey(filename))
             {
-                Func<bool> hasToken = delegate () { return files[filename].utilizing; };
-                this.Req(filename);
-                SpinWait.SpinUntil(hasToken);
+                if ((files[filename].holder != n) ||
+              (files[filename].utilizing))
+                {
+                    Func<bool> hasToken = delegate () { return files[filename].utilizing; };
+                    this.Req(filename);
+                    SpinWait.SpinUntil(hasToken);
+                }
+                Console.WriteLine();
+                Console.WriteLine(files[filename].text);
+                Console.WriteLine();
+                this.Release(filename);
             }
-            Console.WriteLine();
-            Console.WriteLine(files[filename].text);
-            Console.WriteLine();
-            this.Release(filename);
+           
         }
         /// <summary>
         /// Append line to specified file
@@ -316,16 +320,19 @@ namespace Project_1
         /// <param name="line">Line.</param>
         public void Append(string filename, string line)
         {
-            if ((files[filename].holder != n) ||
-              (files[filename].utilizing))
+            if (files.ContainsKey(filename))
             {
-                Func<bool> hasToken = delegate () { return files[filename].utilizing; };
-                this.Req(filename);
-                SpinWait.SpinUntil(hasToken);
+                if ((files[filename].holder != n) ||
+                    (files[filename].utilizing))
+                {
+                    Func<bool> hasToken = delegate () { return files[filename].utilizing; };
+                    this.Req(filename);
+                    SpinWait.SpinUntil(hasToken);
+                }
+                files[filename].text += line;
+                Console.WriteLine(String.Format("Appended '{0}' to {1}", line, filename));
+                this.Release(filename);
             }
-            files[filename].text += line;
-            Console.WriteLine(String.Format("Appended '{0}' to {1}", line, filename));
-            this.Release(filename);
         }
 
         /// <summary>
