@@ -39,7 +39,6 @@ namespace Project_1
                 }
             }
             Node process = new Node(N, tcpConfig[N]);
-            Task listener = Task.Factory.StartNew(() => process.getConnections());
             using (StreamReader treeReader = new StreamReader("tree.txt"))
             {
                 string line;
@@ -57,6 +56,7 @@ namespace Project_1
                         process.addNeighbor(parent, tcpConfig[parent]);
                 }
             }
+            Task listener = Task.Factory.StartNew(() => process.getConnections());
 
             while (true)
             {

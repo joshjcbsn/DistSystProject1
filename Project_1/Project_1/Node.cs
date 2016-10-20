@@ -48,6 +48,8 @@ namespace Project_1
 
         public void getConnections()
         {
+
+            
             while (true)
             {
                 try
@@ -117,6 +119,7 @@ namespace Project_1
                 string host = neighbors[P].dns;
                 IPAddress ip = IPAddress.Parse(neighbors[P].ip);
                 int portNum = neighbors[P].port;
+
                 Console.WriteLine("Sending '{0}' to {1} on port {2}", msg, host, portNum);
                 using (TcpClient client = new TcpClient(host, portNum))
                 {
