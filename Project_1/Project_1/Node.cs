@@ -54,7 +54,7 @@ namespace Project_1
             {
                 try
                 {
-                    Console.WriteLine("Waiting for connection");
+                    //Console.WriteLine("Waiting for connection");
 
                     using (TcpClient client = listener.AcceptTcpClient())
                     {
