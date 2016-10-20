@@ -118,9 +118,9 @@ namespace Project_1
                 IPAddress ip = IPAddress.Parse(neighbors[P].ip);
                 int portNum = neighbors[P].port;
                 Console.WriteLine("Sending '{0}' to {1} on port {2}", msg, host, portNum);
-                using (TcpClient client = new TcpClient(new IPEndPoint(ip, portNum)))
+                using (TcpClient client = new TcpClient(host, portNum))
                 {
-                    //client.Connect(ip, portNum);
+                   // client.Connect(ip, portNum);
                     try
                     {
                         using (NetworkStream stream = client.GetStream())
