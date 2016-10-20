@@ -109,6 +109,10 @@ namespace Project_1
             {
                 Delete(args[1]);
             }
+            else if (args[0] == "DELETED")
+            {
+                Deleted(args[1]);
+            }
         }
 
         public void sendMsg(int P, string msg)
@@ -277,13 +281,13 @@ namespace Project_1
 
             files.Remove(filename);
             foreach (int P in neighbors.Keys)
-                sendMsg(P, String.Format("DELETE {0}", filename));
+                sendMsg(P, String.Format("DELETED {0}", filename));
         }
         private void Deleted(string filename)
         {
             if (files.Remove(filename))
                 foreach (int P in neighbors.Keys)
-                    sendMsg(P, String.Format("DELETE {0}", filename));
+                    sendMsg(P, String.Format("DELETED {0}", filename));
         }
 
         /// <summary>
