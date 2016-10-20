@@ -39,7 +39,6 @@ namespace Project_1
                 }
             }
             Node process = new Node(N, tcpConfig[N]);
-            Console.WriteLine("test0");
             using (StreamReader treeReader = new StreamReader("tree.txt"))
             {
                 string line;
@@ -57,9 +56,8 @@ namespace Project_1
                         process.addNeighbor(parent, tcpConfig[parent]);
                 }
             }
-            Console.WriteLine("test1");
+            process.printNeighbors();
             Task listener = Task.Factory.StartNew(() => process.getConnections());
-            Console.WriteLine("test2");
             while (true)
             {
                 string line = Console.ReadLine();

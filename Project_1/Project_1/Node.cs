@@ -10,21 +10,14 @@ using System.Threading.Tasks;
 
 namespace Project_1
 {
-
-
     class Node
     {
         public int n; //process number
-        public TCPConfig tcp;
-        public TcpListener listener;
-        //public Node parent;
-        //public List<Node> children = new List<Node>();
+        public TCPConfig tcp; //tcp configuration of this node
+        public TcpListener listener; //tcp listener for this node
         public Dictionary<int, TCPConfig> neighbors = new Dictionary<int, TCPConfig>(); //neighboring nodes
         public Dictionary<string, FileToken> files = new Dictionary<string, FileToken>(); //info on files
-
-        
-
-        
+  
         /// <summary>
         /// Initializes new process
         /// </summary>
@@ -34,55 +27,51 @@ namespace Project_1
         {
             //set process number
             n = N;
+            //set TCPConfig
             tcp = TCP;
-            
+            //start listener        
             try
             {
                 listener = new TcpListener(IPAddress.Any, tcp.port);
                 listener.Start();
-
             }
             catch (Exception ex) { Console.WriteLine(String.Format("error: {0}", ex.Message)); }
-
         }
 
+        /// <summary>
+        /// Prints neighbors, then begins listening for connections
+        /// </summary>
         public void getConnections()
         {
 
-            
-            while (true)
+            try
             {
-                try
+                //AcceptTcpClient blocks this thread until it recieves a connection
+                Console.WriteLine("Waiting for connection");
+                using (TcpClient client = listener.AcceptTcpClient())
                 {
-                    //Console.WriteLine("Waiting for connection");
-
-                    using (TcpClient client = listener.AcceptTcpClient())
+                    getConnections();
+                    byte[] bytes = new byte[1024];
+                    string data = null;
+                    Console.WriteLine("Connected");
+                    NetworkStream stream = client.GetStream();
+                    int i;
+                    // Loop to receive all the data sent by the client.
+                    i = stream.Read(bytes, 0, bytes.Length);
+                    while (i != 0)
                     {
-                        byte[] bytes = new byte[1024];
-                        string data = null;
-                        Console.WriteLine("Connected");
-                        NetworkStream stream = client.GetStream();
-                        int i;
-                        // Loop to receive all the data sent by the client.
+                        // Translate data bytes to a ASCII string.
+                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                        Console.WriteLine(String.Format("Received: {0}", data));
+                        // Process the data sent by the client.
                         i = stream.Read(bytes, 0, bytes.Length);
-                        while (i != 0)
-                        {
-                            // Translate data bytes to a ASCII string.
-                            data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                            Console.WriteLine(String.Format("Received: {0}", data));
-                            // Process the data sent by the client.
-
-                            i = stream.Read(bytes, 0, bytes.Length);
-
-                        }
-                        this.msgHandler(data);
-                        // Shutdown and end connection
                     }
+                    this.msgHandler(data);
+                    // Shutdown and end connection
                 }
-                catch (Exception ex) { }// Console.WriteLine(ex.Message); }
-                
             }
-           
+            catch (Exception ex) { Console.WriteLine(ex.Message); }            
+                      
         }
         
         /// <summary>
@@ -103,7 +92,7 @@ namespace Project_1
             }
             else if (args[0] == "CREATE")
             {
-                Create(args[1], Convert.ToInt32(args[2]));
+                Created(args[1], Convert.ToInt32(args[2]));
             }
             else if (args[0] == "DELETE")
             {
@@ -154,11 +143,14 @@ namespace Project_1
             neighbors.Add(N, TCP);
         }
 
+        /// <summary>
+        /// Initializes request for filename if it hasn't already been requested
+        /// </summary>
+        /// <param name="filename"></param>
         public void Req(string filename)
         {
             if (!(files[filename].asked))
             {
-                Console.WriteLine("P{0} Req({1})", n, filename);
                 files[filename].queue.Add(n);
                 if (files[filename].queue[0] == n)
                 {
@@ -167,19 +159,17 @@ namespace Project_1
                     files[filename].asked = true;
                 }
             }
-            else
-            {
-                Console.WriteLine("asked");
-            }
-
         }
 
+        /// <summary>
+        /// Forwards request for filename from process p, or replies with privilege
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="p"></param>
         private void Req(string filename, int p)
         {
             if (!(files[filename].asked))
             {
-                Console.WriteLine("P{0} Req({1})", n, filename);
-
                 files[filename].queue.Add(p);
                 if (files[filename].queue[0] == p)
                 {
@@ -196,13 +186,14 @@ namespace Project_1
 
                 }
             }
-            else
-            {
-                Console.WriteLine("asked");
-            }
 
         }
 
+        /// <summary>
+        /// Sends file token for filename to the holder, or privileges current process if it is the holder
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="text"></param>
         public void Privilege(string filename, string text)
         {
             files[filename].text = text;
@@ -210,32 +201,26 @@ namespace Project_1
             files[filename].setHolder(files[filename].queue[0]);
             files[filename].queue.RemoveAt(0);
             if (files[filename].holder == n)
-            {
-                Console.WriteLine("P{0} privileged", n);
                 files[filename].setUsing(true);
-            }
             else
-            {
-                Console.WriteLine("P{0} Privilege({1}, {2})", n, filename, files[filename].holder);
                 sendMsg(files[filename].holder, String.Format("PRIVILEGE {0} {1}", filename, text));
-            }
-
-
         }
+
+        /// <summary>
+        /// Releases use of filename, sends privilege to first process in queue
+        /// </summary>
+        /// <param name="filename"></param>
         public void Release(string filename)
         {
             Console.WriteLine("P{0} released {1}", n, filename);
             files[filename].setUsing(false);
             files[filename].setAsked(false);
             if ((files[filename].queue.Count) > 0)
-            {
                 sendMsg(files[filename].queue[0], String.Format("PRIVILEGE {0} {1}", filename, files[filename].text));
-
-            }
         }
 
         /// <summary>
-        /// Create file "fileName".
+        /// Create file "filename" and alert neighbors that it has been created
         /// </summary>
         /// <param name="filename">File name.</param>
         public void Create(string filename)
@@ -243,12 +228,15 @@ namespace Project_1
             FileToken file = new FileToken(filename, n);
             files.Add(filename, file);
             foreach (int P in neighbors.Keys)
-            {
                 sendMsg(P, String.Format("CREATE {0} {1}", filename, n));
-
-            }
         }
-        private void Create(string filename, int h)
+
+        /// <summary>
+        /// Add filename with holder h to dictionary of file tokens and alert other neighbors that it has been created
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="h"></param>
+        private void Created(string filename, int h)
         {
             if (!(files.ContainsKey(filename)))
             {
@@ -283,6 +271,10 @@ namespace Project_1
             foreach (int P in neighbors.Keys)
                 sendMsg(P, String.Format("DELETED {0}", filename));
         }
+        /// <summary>
+        /// Removes filetoken for filename from dictionary
+        /// </summary>
+        /// <param name="filename"></param>
         private void Deleted(string filename)
         {
             if (files.Remove(filename))
@@ -321,9 +313,13 @@ namespace Project_1
                 SpinWait.SpinUntil(hasToken);
             }
             files[filename].text += line;
+            Console.WriteLine(String.Format("Appended '{0}' to {1}", line, filename));
             this.Release(filename);
         }
 
+        /// <summary>
+        /// Prints files stored in memory
+        /// </summary>
         public void printFiles()
         {
             Console.WriteLine("Process {0}", n);

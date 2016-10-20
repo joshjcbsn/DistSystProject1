@@ -39,7 +39,7 @@ namespace Project_1
 
         public void printInfo()
         {
-            Console.WriteLine("{0}\t{1}", name, holder);
+            Console.WriteLine("{0}\th={1}", name, holder);
         }
     }
 }
