@@ -40,7 +40,6 @@ namespace Project_1
             {
                 listener = new TcpListener(IPAddress.Any, tcp.port);
                 listener.Start();
-                Console.WriteLine("started listener");
 
             }
             catch (Exception ex) { Console.WriteLine(String.Format("error: {0}", ex.Message)); }
@@ -300,7 +299,7 @@ namespace Project_1
                 this.Req(filename);
                 SpinWait.SpinUntil(hasToken);
             }
-            Console.Write(files[filename].text);
+            Console.WriteLine(files[filename].text);
             this.Release(filename);
         }
         /// <summary>

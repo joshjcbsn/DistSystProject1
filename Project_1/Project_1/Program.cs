@@ -64,7 +64,7 @@ namespace Project_1
             {
                 string line = Console.ReadLine();
                 char[] space = { ' ' };
-                string[] words = line.Split(space);
+                string[] words = line.Split(space, 3);
                 string command = words[0];
                 if (command == "CREATE")
                     process.Create(words[1]);
