@@ -304,7 +304,9 @@ namespace Project_1
                 this.Req(filename);
                 SpinWait.SpinUntil(hasToken);
             }
+            Console.WriteLine();
             Console.WriteLine(files[filename].text);
+            Console.WriteLine();
             this.Release(filename);
         }
         /// <summary>
