@@ -42,7 +42,7 @@ namespace Project_1
                 listener = new TcpListener(IPAddress.Any, tcp.port);
                 listener.Start();
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex) { Console.WriteLine(String.Format("error: {0}", ex.Message)); }
 
         }
 
