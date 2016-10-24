@@ -79,7 +79,7 @@ namespace Project_1
         /// handles messages recieved from neighbors
         /// </summary>
         /// <param name="msg"></param>
-        public void msgHandler(string msg)
+        private void msgHandler(string msg)
         {
             char[] space = { ' ' };
             var args = msg.Split(space,3);
@@ -105,7 +105,7 @@ namespace Project_1
             }
         }
 
-        public void sendMsg(int P, string msg)
+        private void sendMsg(int P, string msg)
         {
             
             try
@@ -146,7 +146,7 @@ namespace Project_1
         /// Initializes request for filename if it hasn't already been requested
         /// </summary>
         /// <param name="filename"></param>
-        public void Req(string filename)
+        private void Req(string filename)
         {
             if (!(files[filename].asked))
             {
@@ -195,7 +195,7 @@ namespace Project_1
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="text"></param>
-        public void Privilege(string filename, string text)
+        private void Privilege(string filename, string text)
         {
             files[filename].text = text;
             files[filename].setAsked(false);
@@ -212,7 +212,7 @@ namespace Project_1
         /// Releases use of filename, sends privilege to first process in queue
         /// </summary>
         /// <param name="filename"></param>
-        public void Release(string filename)
+        private void Release(string filename)
         {
             Console.WriteLine("P{0} released {1}", n, filename);
             files[filename].setUsing(false);
